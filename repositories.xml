@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<repositories version="1.0">
+  <repo quality="experimental" status="unofficial">
+    <name>qgj</name>
+      <description lang="en">QGJs Personal Gentoo Overlay.</description>
+        <homepage>https://github.com/q-g-j/qgj-overlay</homepage>
+        <owner type="person">
+            <name>QGJ</name>
+            <email>qgj@gmx.net</email>
+        </owner>
+        <source type="git">git://github.com/q-g-j/qgj-overlay.git</source>
+        <feed>https://github.com/q-g-j/qgj-overlay/commits/master.atom</feed>
+  </repo>
+</repositories>
