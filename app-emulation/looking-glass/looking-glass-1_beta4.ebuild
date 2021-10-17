@@ -4,7 +4,7 @@
 EAPI=7
 
 MY_PN="LookingGlass"
-MY_PV="B2"
+MY_PV="B4"
 MY_P="${MY_PN}-${MY_PV}"
 
 CMAKE_MAKEFILE_GENERATOR=emake
@@ -36,7 +36,7 @@ DEPEND="${RDEPEND}
 BDEPEND="virtual/pkgconfig
 	winhost? ( cross-x86_64-w64-mingw32/gcc )"
 
-S="${WORKDIR}/looking-glass-1_beta3"
+S="${WORKDIR}/looking-glass-1_beta4"
 
 src_prepare() {
 	default
