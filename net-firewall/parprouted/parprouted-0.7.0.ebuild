@@ -23,6 +23,11 @@ RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/parprouted-0.7"
 
+src_prepare() {
+	default
+	sed -i 's|/sbin/ip|/bin/ip|g' ${S}/parprouted.c
+}
+
 src_compile() {
 	emake all || die
 }
