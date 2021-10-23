@@ -22,14 +22,8 @@ BUILD_TARGETS="all"
 
 src_prepare() {
 	default
-	if [ "$(basename -a `readlink -f /usr/src/linux` | grep -e "-rt[0-9]*$")" != "" ]; then
-	        KERNEL_VERSION=$(basename -a `readlink -f /usr/src/linux` | sed s/linux-// | sed 's/\([0-9\.]-\)/\1rt-/')
-	else
-	        KERNEL_VERSION=$(basename -a `readlink -f /usr/src/linux` | sed s/linux-//)
-	fi
-	echo
-	echo $KERNEL_VERSION
-	echo
+
+	KERNEL_VERSION=$(cat /usr/src/linux/include/config/kernel.release)
 
 	sed -i "s/\$(shell uname -r)/$KERNEL_VERSION/g" Makefile
 }
