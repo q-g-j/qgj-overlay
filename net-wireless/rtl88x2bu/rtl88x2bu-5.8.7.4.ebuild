@@ -26,4 +26,8 @@ src_prepare() {
 	KERNEL_VERSION=$(cat /usr/src/linux/include/config/kernel.release)
 
 	sed -i "s/\$(shell uname -r)/$KERNEL_VERSION/g" Makefile
+
+	cd ${S}
+	cp ${FILESDIR}/*.h .
+	sed -i 's|#include <net/ipx.h>|#include "../ipx.h"|' core/rtw_br_ext.c
 }
