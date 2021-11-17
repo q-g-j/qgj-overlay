@@ -6,7 +6,7 @@
 		<description>QGJs personal gentoo overlay repository</description>
 		<homepage>https://github.com/q-g-j/qgj-overlay</homepage>
 		<owner>
-			<email>qgj@gmx.net</email>
+			<email>qgj.devel@gmail.com</email>
 		</owner>
 		<source type="git">https://github.com/q-g-j/qgj-overlay</source>
 	</repo>
