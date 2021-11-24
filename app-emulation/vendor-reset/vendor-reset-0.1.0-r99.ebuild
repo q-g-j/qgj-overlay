@@ -31,7 +31,11 @@ pkg_setup() {
 
 src_prepare() {
         default
-	KERNEL_VERSION=$(cat /usr/src/linux/include/config/kernel.release)
+	VERSION=$(cat /usr/src/linux/Makefile | grep "^VERSION = " | sed 's/VERSION = //')
+	PATCHLEVEL=$(cat /usr/src/linux/Makefile | grep "^PATCHLEVEL = " | sed 's/PATCHLEVEL = //')
+	SUBLEVEL=$(cat /usr/src/linux/Makefile | grep "^SUBLEVEL = " | sed 's/SUBLEVEL = //')
+	EXTRAVERSION=$(cat /usr/src/linux/Makefile | grep "^EXTRAVERSION = " | sed 's/EXTRAVERSION = //')
+	KERNEL_VERSION="${VERSION}.${PATCHLEVEL}.${SUBLEVEL}${EXTRAVERSION}"
 	sed -i "s/\$(shell uname -r)/$KERNEL_VERSION/" Makefile
 }
 
