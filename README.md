@@ -11,6 +11,7 @@ Not all ebuilds are my own work. Most are taken from other overlays that I did n
 - ``media-sound/carla`` - enabled Win VST support (needs a mingw cross compiler provided by crossdev)
 - ``kde-plasma/discover`` - enabled snap support (depends on app-emulation/snapd-glib; also in my overlay)
 - ``net-firewall/parprouted`` - updated the download link and fixed the code to use /bin/ip instead of /sbin/ip
+- ``app-emulation/vendor-reset`` - get the kernel version from the sources symlinked to "/usr/src/linux" instead of the running kernel
 
 My own ebuilds so far are:
 - ``app-misc/appimagelauncher-bin``
