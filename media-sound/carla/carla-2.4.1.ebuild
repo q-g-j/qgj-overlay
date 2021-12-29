@@ -87,7 +87,13 @@ src_compile() {
 	emake PREFIX="/usr" "${myemakeargs[@]}"
 
 	if use vst; then
-		emake win64 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++
+		sed -i 's|#include \"mingw-std-threads/mingw.condition_variable.h\"|#include <mingw-std-threads/mingw.condition_variable.h>|' ${S}/source/modules/juce_core/threads/juce_WaitableEvent.h || die
+		sed -i 's|#include \"mingw-std-threads/mingw.mutex.h\"|#include <mingw-std-threads/mingw.mutex.h.h>|' ${S}/source/modules/hylia/link/AudioEngine.hpp || die
+		sed -i 's|#include \"mingw-std-threads/mingw.thread.h\"|#include <mingw-std-threads/mingw.thread.h>|' ${S}/source/modules/hylia/link/AudioEngine.hpp || die
+		sed -i 's|#include \"mingw-std-threads/mingw.condition_variable.h\"|#include <mingw-std-threads/mingw.condition_variable.h>|' ${S}/source/modules/hylia/link/AudioEngine.hpp || die
+		emake win64 \
+			CC=$(find /usr/bin/x86_64-w64-mingw32-gcc-10* | tail -n1) \
+			CXX=$(find /usr/bin/x86_64-w64-mingw32-g++-10* | tail -n1)
 		emake wine64
 	fi
 }

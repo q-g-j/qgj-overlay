@@ -4,7 +4,7 @@
 EAPI=8
 
 ECM_TEST="true"
-KFMIN=5.82.0
+KFMIN=5.86.0
 QTMIN=5.15.2
 VIRTUALX_REQUIRED="test"
 inherit ecm kde.org
@@ -14,8 +14,8 @@ HOMEPAGE="https://userbase.kde.org/Discover"
 
 LICENSE="GPL-2" # TODO: CHECK
 SLOT="5"
-KEYWORDS="amd64 ~arm arm64 ~ppc64 ~riscv x86"
-IUSE="+firmware flatpak telemetry snap"
+KEYWORDS="amd64 ~arm ~arm64 ~ppc64 ~riscv ~x86"
+IUSE="+firmware flatpak snap telemetry"
 
 # libmarkdown (app-text/discount) only used in PackageKitBackend
 DEPEND="
@@ -46,24 +46,21 @@ DEPEND="
 	>=kde-frameworks/kxmlgui-${KFMIN}:5
 	firmware? ( >=sys-apps/fwupd-1.5.0 )
 	flatpak? (
-		>=dev-libs/appstream-0.12.8:=
+		>=dev-libs/appstream-0.14.4:=
 		sys-apps/flatpak
 	)
+        snap? (
+                app-containers/snapd
+                app-containers/snapd-glib
+        )
 	telemetry? ( dev-libs/kuserfeedback:5 )
-	snap? (
-		app-emulation/snapd
-		app-emulation/snapd-glib
-	)
 "
 RDEPEND="${DEPEND}
 	>=dev-qt/qtquickcontrols2-${QTMIN}:5
 	>=kde-frameworks/kirigami-${KFMIN}:5
 "
 
-PATCHES=(
-	"${FILESDIR}/${PN}-5.21.90-tests-optional.patch"
-	"${FILESDIR}/${PN}-5.22.5-no-updates-kcm.patch"
-)
+PATCHES=( "${FILESDIR}/${PN}-5.21.90-tests-optional.patch" )
 
 src_prepare() {
 	ecm_src_prepare
@@ -73,13 +70,13 @@ src_prepare() {
 
 src_configure() {
 	local mycmakeargs=(
-		-DCMAKE_DISABLE_FIND_PACKAGE_packagekitqt5=ON
-		-DCMAKE_DISABLE_FIND_PACKAGE_Snapd=OFF
-		-DWITH_KCM=OFF
-		-DBUILD_FlatpakBackend=$(usex flatpak)
-		$(cmake_use_find_package flatpak AppStreamQt)
-		-DBUILD_FwupdBackend=$(usex firmware)
-		-DBUILD_SnapBackend=$(usex snap)
+                -DCMAKE_DISABLE_FIND_PACKAGE_packagekitqt5=ON
+                -DCMAKE_DISABLE_FIND_PACKAGE_Snapd=OFF
+                -DWITH_KCM=OFF
+                -DBUILD_FlatpakBackend=$(usex flatpak)
+                $(cmake_use_find_package flatpak AppStreamQt)
+                -DBUILD_FwupdBackend=$(usex firmware)
+                -DBUILD_SnapBackend=$(usex snap)
 		$(cmake_use_find_package telemetry KUserFeedback)
 	)
 
