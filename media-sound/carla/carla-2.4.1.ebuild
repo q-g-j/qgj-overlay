@@ -23,7 +23,7 @@ fi
 LICENSE="GPL-2 LGPL-3"
 SLOT="0"
 
-IUSE="alsa gtk gtk2 opengl osc -pulseaudio rdf sf2 sndfile vst X"
+IUSE="alsa gtk gtk2 opengl osc -pulseaudio rdf sf2 sndfile +vst32 +vst64 X"
 REQUIRED_USE="${PYTHON_REQUIRED_USE}"
 
 RDEPEND="${PYTHON_DEPS}
@@ -43,10 +43,27 @@ RDEPEND="${PYTHON_DEPS}
 	X? ( x11-base/xorg-server )"
 DEPEND=${RDEPEND}
 
-BDEPEND="virtual/pkgconfig
-        vst? ( cross-x86_64-w64-mingw32/gcc:10 )"
-
+BDEPEND="virtual/pkgconfig"
+#        vst32? ( =cross-i686-w64-mingw32/gcc-9* )
+#        vst64? ( =cross-x86_64-w64-mingw32/gcc-9* )"
 src_prepare() {
+	if use vst32; then
+		if [ "$(find /usr/bin/i686-w64-mingw32-gcc-[0-9*\.*]* | grep -v gcc-11 | tail -n1)" == "" ]; then
+			die "Error: No mingw-w64 gcc (32 bit) <= v10 found. Install with 'crossdev --target i686-w64-mingw32'"
+		fi
+		if [ "$(find /usr/bin/i686-w64-mingw32-g++-[0-9*\.*]* | grep -v g++-11 | tail -n1)" == "" ]; then
+			die "Error: No mingw-w64 g++ (32 bit) <= v10 found. Install with 'crossdev --target i686-w64-mingw32'"
+		fi
+	fi
+	if use vst64; then
+		if [ "$(find /usr/bin/x86_64-w64-mingw32-gcc-[0-9*\.*]* | grep -v gcc-11 | tail -n1)" == "" ]; then
+			die "Error: No mingw-w64 gcc (64 bit) <= v10 found. Install with 'crossdev --target x86_64-w64-mingw32'"
+		fi
+		if [ "$(find /usr/bin/x86_64-w64-mingw32-g++-[0-9*\.*]* | grep -v g++-11 | tail -n1)" == "" ]; then
+			die "Error: No mingw-w64 g++ (64 bit) <= v10 found. Install with 'crossdev --target x86_64-w64-mingw32'"
+		fi
+	fi
+
 	sed -i -e "s|exec \$PYTHON|exec ${PYTHON}|" \
 		data/carla \
 		data/carla-control \
@@ -78,7 +95,8 @@ src_compile() {
 		HAVE_PULSEAUDIO=$(usex pulseaudio true false)
 		HAVE_SNDFILE=$(usex sndfile true false)
 		HAVE_X11=$(usex X true false)
-		HAVE_VST=$(usex vst true false)
+		HAVE_VST=$(usex vst32 true false)
+		HAVE_VST=$(usex vst64 true false)
 	)
 
 	# Print which options are enabled/disabled
@@ -86,10 +104,16 @@ src_compile() {
 
 	emake PREFIX="/usr" "${myemakeargs[@]}"
 
-	if use vst; then
+	if use vst32; then
+		emake win32 \
+			CC=$(find /usr/bin/i686-w64-mingw32-gcc-[0-9*\.*]* | grep -v gcc-11 | tail -n1) \
+			CXX=$(find /usr/bin/i686-w64-mingw32-g++-[0-9*\.*]* | grep -v g++-11 | tail -n1)
+		emake wine32
+	fi
+	if use vst64; then
 		emake win64 \
-			CC=$(find /usr/bin/x86_64-w64-mingw32-gcc-10* | tail -n1) \
-			CXX=$(find /usr/bin/x86_64-w64-mingw32-g++-10* | tail -n1)
+			CC=$(find /usr/bin/x86_64-w64-mingw32-gcc-[0-9*\.*]* | grep -v gcc-11 | tail -n1) \
+			CXX=$(find /usr/bin/x86_64-w64-mingw32-g++-[0-9*\.*]* | grep -v g++-11 | tail -n1)
 		emake wine64
 	fi
 }
