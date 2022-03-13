@@ -1,0 +1,10 @@
+--- a/Makefile	2021-06-08 08:49:58.834705010 +0200
++++ b/Makefile	2021-06-08 08:50:20.948704357 +0200
+@@ -67,6 +67,6 @@
+ 
+ .PHONY: install
+-install: module-install
++install:
+ 	install -Dm 0755 corefreq-cli corefreqd -t $(PREFIX)/bin
+ 	install -Dm 0644 corefreqd.service \
+ 		$(PREFIX)/lib/systemd/system/corefreqd.service
