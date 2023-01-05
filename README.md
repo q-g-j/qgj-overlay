@@ -18,4 +18,3 @@ Not all ebuilds are my own work. Most are taken from other overlays that I did n
 My own ebuilds so far are:
 - ``app-misc/appimagelauncher-bin``
 - ``net-wireless/rtl88x2bu``
-- ``app-emulation/snapd-glib``
